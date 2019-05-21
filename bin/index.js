@@ -3,11 +3,15 @@ const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 
-const pkgPath = path.resolve(process.cwd(), './package.json');
-const pak = fs.readFileSync(pkgPath, 'utf8');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('../webpack.config/webpack.base');
+
+// const pkgPath = path.resolve(process.cwd(), './package.json');
+// const pak = fs.readFileSync(pkgPath, 'utf8');
 
 program
-  .version(JSON.parse(pak).version)
+  .version('0.0.1')
   .command('create')
   .arguments('project-name')
   .action(cmd => {
@@ -19,8 +23,15 @@ program
 program
   .command('run')
   .action(() => {
-    console.log('run+++++++');
-    
+    const options = {
+      hot: true,
+      open: true,
+      noInfo: true,
+    }
+    const server = new WebpackDevServer(webpack(config), options)
+    server.listen(8080, '127.0.0.1', () => {
+      console.log('Starting server on http://localhost:8080');
+    });
   })
 
 program.parse(process.argv);
