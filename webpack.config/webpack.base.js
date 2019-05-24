@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HappyPack = require('happypack');
@@ -9,8 +10,11 @@ const buildPath = path.resolve(projectPath, './build');
 module.exports = {
   mode: 'development',
   devtool: "cheap-module-eval-source-map",
-
-  entry: path.resolve(srcPath, './index.js'),
+  target: "electron-renderer",
+  entry: [
+    `webpack-dev-server/client?http://localhost:8080/`,
+    'webpack/hot/only-dev-server',
+    path.resolve(srcPath, './index.js')],
   output: {
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -42,7 +46,9 @@ module.exports = {
 
     new HappyPack({
       loaders: ['babel-loader']
-    })
+    }),
+
+    new webpack.HotModuleReplacementPlugin()
   ]
 
 }

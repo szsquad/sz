@@ -24,9 +24,11 @@ program
   .command('run')
   .action(() => {
     const options = {
-      hot: true,
-      open: true,
+      compress: true,
       noInfo: true,
+      hot: true,
+      disableHostCheck: true,
+      historyApiFallback: true,
     }
     const server = new WebpackDevServer(webpack(config), options)
     server.listen(8080, '127.0.0.1', () => {
